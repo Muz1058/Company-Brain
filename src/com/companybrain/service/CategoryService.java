@@ -1,59 +1,32 @@
 package com.companybrain.service;
 
-import com.companybrain.dao.CategoryDao;
 import com.companybrain.exception.ValidationException;
 import com.companybrain.model.Category;
-import com.companybrain.util.InputValidator;
 
 import java.util.List;
 
 /**
- * Business service managing categories.
+ * Service interface for managing category operations.
  */
-public class CategoryService {
-    private final CategoryDao categoryDao;
-
-    public CategoryService(CategoryDao categoryDao) {
-        this.categoryDao = categoryDao;
-    }
+public interface CategoryService {
 
     /**
-     * Retrieves all categories.
+     * Gets all category rows.
      */
-    public List<Category> getAllCategories() {
-        return categoryDao.findAll();
-    }
+    List<Category> getAllCategories();
 
     /**
-     * Finds a single category by ID.
+     * Retrieves a category by ID.
      */
-    public Category getCategoryById(int id) {
-        return categoryDao.findById(id);
-    }
+    Category getCategoryById(int id);
 
     /**
      * Creates and saves a new category.
      */
-    public void createCategory(String name) throws ValidationException {
-        if (InputValidator.isEmpty(name)) {
-            throw new ValidationException("Category name cannot be empty.");
-        }
-
-        // Check if name already exists (simple uniqueness validation)
-        for (Category cat : categoryDao.findAll()) {
-            if (cat.getName().equalsIgnoreCase(name.trim())) {
-                throw new ValidationException("Category with this name already exists.");
-            }
-        }
-
-        Category category = new Category(0, name.trim());
-        categoryDao.save(category);
-    }
+    void createCategory(String name) throws ValidationException;
 
     /**
-     * Deletes a category by ID.
+     * Deletes an existing category.
      */
-    public void deleteCategory(int id) {
-        categoryDao.delete(id);
-    }
+    void deleteCategory(int id);
 }

@@ -4,6 +4,7 @@ import com.companybrain.controller.LoginController;
 import com.companybrain.dao.UserDaoImpl;
 import com.companybrain.database.DatabaseManager;
 import com.companybrain.service.AuthService;
+import com.companybrain.service.AuthServiceImpl;
 import com.companybrain.view.LoginView;
 
 import javax.swing.*;
@@ -35,7 +36,7 @@ public class Main {
         // 3. Launch Login screen on Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
             LoginView loginView = new LoginView();
-            AuthService authService = new AuthService(new UserDaoImpl());
+            AuthService authService = new AuthServiceImpl(new UserDaoImpl());
             new LoginController(loginView, authService);
             loginView.setVisible(true);
         });
