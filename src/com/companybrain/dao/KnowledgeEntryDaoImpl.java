@@ -17,7 +17,7 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
     @Override
     public List<KnowledgeEntry> findAll() {
         List<KnowledgeEntry> entries = new ArrayList<>();
-        String sql = "SELECT id, title, content, tags, author_id, created_at, updated_at " +
+        String sql = "SELECT id, title, description, category_id, author_id, created_at, updated_at " +
                      "FROM knowledge_entries ORDER BY updated_at DESC";
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -35,7 +35,7 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
 
     @Override
     public KnowledgeEntry findById(int id) {
-        String sql = "SELECT id, title, content, tags, author_id, created_at, updated_at " +
+        String sql = "SELECT id, title, description, category_id, author_id, created_at, updated_at " +
                      "FROM knowledge_entries WHERE id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -55,7 +55,7 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
 
     @Override
     public void save(KnowledgeEntry entry) {
-        String sql = "INSERT INTO knowledge_entries (title, content, tags, author_id, created_at, updated_at) " +
+        String sql = "INSERT INTO knowledge_entries (title, description, category_id, author_id, created_at, updated_at) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -65,8 +65,8 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
             entry.setUpdatedAt(LocalDateTime.now());
 
             pstmt.setString(1, entry.getTitle());
-            pstmt.setString(2, entry.getContent());
-            pstmt.setString(3, entry.getTags());
+            pstmt.setString(2, entry.getDescription());
+            pstmt.setInt(3, entry.getCategoryId());
             pstmt.setInt(4, entry.getAuthorId());
             pstmt.setString(5, entry.getCreatedAt().toString());
             pstmt.setString(6, entry.getUpdatedAt().toString());
@@ -84,7 +84,7 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
 
     @Override
     public void update(KnowledgeEntry entry) {
-        String sql = "UPDATE knowledge_entries SET title = ?, content = ?, tags = ?, updated_at = ? WHERE id = ?";
+        String sql = "UPDATE knowledge_entries SET title = ?, description = ?, category_id = ?, updated_at = ? WHERE id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -92,8 +92,8 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
             entry.setUpdatedAt(LocalDateTime.now());
 
             pstmt.setString(1, entry.getTitle());
-            pstmt.setString(2, entry.getContent());
-            pstmt.setString(3, entry.getTags());
+            pstmt.setString(2, entry.getDescription());
+            pstmt.setInt(3, entry.getCategoryId());
             pstmt.setString(4, entry.getUpdatedAt().toString());
             pstmt.setInt(5, entry.getId());
             pstmt.executeUpdate();
@@ -119,8 +119,8 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
     @Override
     public List<KnowledgeEntry> search(String keyword) {
         List<KnowledgeEntry> entries = new ArrayList<>();
-        String sql = "SELECT id, title, content, tags, author_id, created_at, updated_at " +
-                     "FROM knowledge_entries WHERE title LIKE ? OR content LIKE ? OR tags LIKE ? " +
+        String sql = "SELECT id, title, description, category_id, author_id, created_at, updated_at " +
+                     "FROM knowledge_entries WHERE title LIKE ? OR description LIKE ? " +
                      "ORDER BY updated_at DESC";
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -129,7 +129,6 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
             String queryParam = "%" + keyword + "%";
             pstmt.setString(1, queryParam);
             pstmt.setString(2, queryParam);
-            pstmt.setString(3, queryParam);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
@@ -146,8 +145,8 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
         return new KnowledgeEntry(
                 rs.getInt("id"),
                 rs.getString("title"),
-                rs.getString("content"),
-                rs.getString("tags"),
+                rs.getString("description"),
+                rs.getInt("category_id"),
                 rs.getInt("author_id"),
                 LocalDateTime.parse(rs.getString("created_at")),
                 LocalDateTime.parse(rs.getString("updated_at"))

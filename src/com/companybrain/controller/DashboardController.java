@@ -1,14 +1,18 @@
 package com.companybrain.controller;
 
+import com.companybrain.model.Category;
 import com.companybrain.model.KnowledgeEntry;
 import com.companybrain.service.AuthService;
+import com.companybrain.service.CategoryService;
 import com.companybrain.service.KnowledgeService;
 import com.companybrain.view.DashboardView;
 import com.companybrain.view.LoginView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller managing dashboard operations: viewing, searching, and deleting entries, and signing out.
@@ -16,16 +20,18 @@ import java.util.List;
 public class DashboardController {
     private final DashboardView view;
     private final KnowledgeService knowledgeService;
+    private final CategoryService categoryService;
     private final AuthService authService;
     private final LoginView loginView;
     private final KnowledgeEntryController entryController;
 
-    public DashboardController(DashboardView view, KnowledgeService knowledgeService, AuthService authService, LoginView loginView) {
+    public DashboardController(DashboardView view, KnowledgeService knowledgeService, CategoryService categoryService, AuthService authService, LoginView loginView) {
         this.view = view;
         this.knowledgeService = knowledgeService;
+        this.categoryService = categoryService;
         this.authService = authService;
         this.loginView = loginView;
-        this.entryController = new KnowledgeEntryController(knowledgeService);
+        this.entryController = new KnowledgeEntryController(knowledgeService, categoryService);
 
         // Set user session info
         if (authService.getCurrentUser() != null) {
@@ -45,7 +51,15 @@ public class DashboardController {
 
     private void refreshEntries() {
         List<KnowledgeEntry> entries = knowledgeService.getAllEntries();
-        view.setEntries(entries);
+        
+        // Build category lookup map (ID -> Name)
+        List<Category> categories = categoryService.getAllCategories();
+        Map<Integer, String> categoryMap = new HashMap<>();
+        for (Category cat : categories) {
+            categoryMap.put(cat.getId(), cat.getName());
+        }
+
+        view.setEntries(entries, categoryMap);
     }
 
     private class SearchActionListener implements ActionListener {
@@ -53,7 +67,15 @@ public class DashboardController {
         public void actionPerformed(ActionEvent e) {
             String query = view.getSearchQuery();
             List<KnowledgeEntry> searchResults = knowledgeService.searchEntries(query);
-            view.setEntries(searchResults);
+            
+            // Re-fetch category map
+            List<Category> categories = categoryService.getAllCategories();
+            Map<Integer, String> categoryMap = new HashMap<>();
+            for (Category cat : categories) {
+                categoryMap.put(cat.getId(), cat.getName());
+            }
+
+            view.setEntries(searchResults, categoryMap);
         }
     }
 

@@ -1,17 +1,19 @@
 package com.companybrain.view;
 
+import com.companybrain.model.Category;
 import com.companybrain.view.components.ModernButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 /**
  * Swing JDialog for creating or editing a KnowledgeEntry.
  */
 public class KnowledgeEntryForm extends JDialog {
     private JTextField txtTitle;
-    private JTextArea txtContent;
-    private JTextField txtTags;
+    private JTextArea txtDescription;
+    private JComboBox<Category> cmbCategory;
     
     private ModernButton btnSave;
     private ModernButton btnCancel;
@@ -54,35 +56,34 @@ public class KnowledgeEntryForm extends JDialog {
         gbc.weightx = 1.0;
         fieldsPanel.add(txtTitle, gbc);
 
-        // Tags
-        JLabel lblTags = new JLabel("Tags:");
-        lblTags.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        // Category
+        JLabel lblCategory = new JLabel("Category:");
+        lblCategory.setFont(new Font("Segoe UI", Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 0.0;
-        fieldsPanel.add(lblTags, gbc);
+        fieldsPanel.add(lblCategory, gbc);
 
-        txtTags = new JTextField();
-        txtTags.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        txtTags.setToolTipText("Comma-separated values, e.g. java,swing,sqlite");
+        cmbCategory = new JComboBox<>();
+        cmbCategory.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
-        fieldsPanel.add(txtTags, gbc);
+        fieldsPanel.add(cmbCategory, gbc);
 
-        // Content
-        JLabel lblContent = new JLabel("Content:");
-        lblContent.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        // Description
+        JLabel lblDesc = new JLabel("Description:");
+        lblDesc.setFont(new Font("Segoe UI", Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0.0;
-        fieldsPanel.add(lblContent, gbc);
+        fieldsPanel.add(lblDesc, gbc);
 
-        txtContent = new JTextArea(12, 30);
-        txtContent.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        txtContent.setLineWrap(true);
-        txtContent.setWrapStyleWord(true);
-        JScrollPane scrollPane = new JScrollPane(txtContent);
+        txtDescription = new JTextArea(12, 30);
+        txtDescription.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        txtDescription.setLineWrap(true);
+        txtDescription.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(txtDescription);
         
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -117,6 +118,27 @@ public class KnowledgeEntryForm extends JDialog {
         add(mainPanel);
     }
 
+    public void setCategories(List<Category> categories) {
+        cmbCategory.removeAllItems();
+        for (Category category : categories) {
+            cmbCategory.addItem(category);
+        }
+    }
+
+    public Category getSelectedCategory() {
+        return (Category) cmbCategory.getSelectedItem();
+    }
+
+    public void setSelectedCategoryId(int categoryId) {
+        for (int i = 0; i < cmbCategory.getItemCount(); i++) {
+            Category cat = cmbCategory.getItemAt(i);
+            if (cat.getId() == categoryId) {
+                cmbCategory.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+
     public String getEntryTitle() {
         return txtTitle.getText();
     }
@@ -125,20 +147,12 @@ public class KnowledgeEntryForm extends JDialog {
         txtTitle.setText(title);
     }
 
-    public String getEntryContent() {
-        return txtContent.getText();
+    public String getEntryDescription() {
+        return txtDescription.getText();
     }
 
-    public void setEntryContent(String content) {
-        txtContent.setText(content);
-    }
-
-    public String getEntryTags() {
-        return txtTags.getText();
-    }
-
-    public void setEntryTags(String tags) {
-        txtTags.setText(tags);
+    public void setEntryDescription(String description) {
+        txtDescription.setText(description);
     }
 
     public boolean isSaveClicked() {

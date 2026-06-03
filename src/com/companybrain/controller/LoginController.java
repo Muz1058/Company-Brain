@@ -1,9 +1,11 @@
 package com.companybrain.controller;
 
+import com.companybrain.dao.CategoryDaoImpl;
 import com.companybrain.dao.KnowledgeEntryDaoImpl;
 import com.companybrain.exception.AuthenticationException;
 import com.companybrain.model.User;
 import com.companybrain.service.AuthService;
+import com.companybrain.service.CategoryService;
 import com.companybrain.service.KnowledgeService;
 import com.companybrain.view.DashboardView;
 import com.companybrain.view.LoginView;
@@ -40,8 +42,9 @@ public class LoginController {
                 // Initialize Dashboard MVC
                 DashboardView dashboardView = new DashboardView();
                 KnowledgeService knowledgeService = new KnowledgeService(new KnowledgeEntryDaoImpl());
+                CategoryService categoryService = new CategoryService(new CategoryDaoImpl());
                 
-                new DashboardController(dashboardView, knowledgeService, authService, view);
+                new DashboardController(dashboardView, knowledgeService, categoryService, authService, view);
                 dashboardView.setVisible(true);
 
             } catch (AuthenticationException ex) {

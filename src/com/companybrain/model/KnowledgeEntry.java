@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 public class KnowledgeEntry {
     private int id;
     private String title;
-    private String content;
-    private String tags; // Comma-separated tags
+    private String description;
+    private int categoryId;
     private int authorId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -17,11 +17,11 @@ public class KnowledgeEntry {
     public KnowledgeEntry() {
     }
 
-    public KnowledgeEntry(int id, String title, String content, String tags, int authorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public KnowledgeEntry(int id, String title, String description, int categoryId, int authorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
-        this.content = content;
-        this.tags = tags;
+        this.description = description;
+        this.categoryId = categoryId;
         this.authorId = authorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -43,20 +43,20 @@ public class KnowledgeEntry {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getTags() {
-        return tags;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public int getAuthorId() {
@@ -88,7 +88,7 @@ public class KnowledgeEntry {
         return "KnowledgeEntry{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", tags='" + tags + '\'' +
+                ", categoryId=" + categoryId +
                 ", authorId=" + authorId +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

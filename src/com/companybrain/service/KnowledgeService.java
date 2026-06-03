@@ -5,7 +5,6 @@ import com.companybrain.exception.ValidationException;
 import com.companybrain.model.KnowledgeEntry;
 import com.companybrain.util.InputValidator;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,25 +34,33 @@ public class KnowledgeService {
     /**
      * Creates and saves a new knowledge entry.
      */
-    public void createEntry(String title, String content, String tags, int authorId) throws ValidationException {
+    public void createEntry(String title, String description, int categoryId, int authorId) throws ValidationException {
         try {
-            InputValidator.validateKnowledgeEntry(title, content);
+            InputValidator.validateKnowledgeEntry(title, description);
         } catch (IllegalArgumentException e) {
             throw new ValidationException(e.getMessage());
         }
 
-        KnowledgeEntry entry = new KnowledgeEntry(0, title.trim(), content.trim(), tags != null ? tags.trim() : "", authorId, null, null);
+        if (categoryId <= 0) {
+            throw new ValidationException("Please select a valid category.");
+        }
+
+        KnowledgeEntry entry = new KnowledgeEntry(0, title.trim(), description.trim(), categoryId, authorId, null, null);
         entryDao.save(entry);
     }
 
     /**
      * Updates an existing entry.
      */
-    public void updateEntry(int id, String title, String content, String tags) throws ValidationException {
+    public void updateEntry(int id, String title, String description, int categoryId) throws ValidationException {
         try {
-            InputValidator.validateKnowledgeEntry(title, content);
+            InputValidator.validateKnowledgeEntry(title, description);
         } catch (IllegalArgumentException e) {
             throw new ValidationException(e.getMessage());
+        }
+
+        if (categoryId <= 0) {
+            throw new ValidationException("Please select a valid category.");
         }
 
         KnowledgeEntry existing = entryDao.findById(id);
@@ -62,8 +69,8 @@ public class KnowledgeService {
         }
 
         existing.setTitle(title.trim());
-        existing.setContent(content.trim());
-        existing.setTags(tags != null ? tags.trim() : "");
+        existing.setDescription(description.trim());
+        existing.setCategoryId(categoryId);
         entryDao.update(existing);
     }
 
@@ -75,7 +82,7 @@ public class KnowledgeService {
     }
 
     /**
-     * Searches entries based on keyword matching titles, contents, or tags.
+     * Searches entries based on keyword matching titles or descriptions.
      */
     public List<KnowledgeEntry> searchEntries(String keyword) {
         if (InputValidator.isEmpty(keyword)) {

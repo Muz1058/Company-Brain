@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Swing JFrame for the Dashboard Window.
@@ -48,7 +49,7 @@ public class DashboardView extends JFrame {
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         searchPanel.setBackground(Color.WHITE);
-        txtSearch = new SearchField("Search knowledge by title, content or tags...", 30);
+        txtSearch = new SearchField("Search knowledge by title or description...", 30);
         btnSearch = new ModernButton("Search");
         searchPanel.add(txtSearch);
         searchPanel.add(btnSearch);
@@ -65,7 +66,7 @@ public class DashboardView extends JFrame {
         headerPanel.add(sessionPanel, BorderLayout.EAST);
 
         // Content Table Panel
-        String[] columnNames = {"ID", "Title", "Tags", "Last Updated"};
+        String[] columnNames = {"ID", "Title", "Category", "Last Updated"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -110,14 +111,15 @@ public class DashboardView extends JFrame {
         lblUserSession.setText("Logged in as: " + username);
     }
 
-    public void setEntries(List<KnowledgeEntry> entries) {
+    public void setEntries(List<KnowledgeEntry> entries, Map<Integer, String> categoryMap) {
         this.currentEntriesList = entries;
         tableModel.setRowCount(0);
         for (KnowledgeEntry entry : entries) {
+            String categoryName = categoryMap.getOrDefault(entry.getCategoryId(), "Unknown");
             tableModel.addRow(new Object[]{
                     entry.getId(),
                     entry.getTitle(),
-                    entry.getTags(),
+                    categoryName,
                     entry.getUpdatedAt().toString().replace('T', ' ').substring(0, 19)
             });
         }
