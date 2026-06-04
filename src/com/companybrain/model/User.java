@@ -1,8 +1,6 @@
 package com.companybrain.model;
 
-/**
- * Represents a system user.
- */
+
 public class User {
     private int id;
     private String username;

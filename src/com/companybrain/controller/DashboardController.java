@@ -8,15 +8,14 @@ import com.companybrain.service.KnowledgeService;
 import com.companybrain.view.DashboardView;
 import com.companybrain.view.LoginView;
 
+import javax.swing.JFileChooser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller managing dashboard operations: viewing, searching, and deleting entries, and signing out.
- */
+
 public class DashboardController {
     private final DashboardView view;
     private final KnowledgeService knowledgeService;
@@ -33,26 +32,27 @@ public class DashboardController {
         this.loginView = loginView;
         this.entryController = new KnowledgeEntryController(knowledgeService, categoryService);
 
-        // Set user session info
+        
         if (authService.getCurrentUser() != null) {
             view.setSessionUser(authService.getCurrentUser().getUsername());
         }
 
-        // Load initial entry list
+        
         refreshEntries();
 
-        // Wire ActionListeners
+        
         view.addSearchListener(new SearchActionListener());
         view.addCreateListener(new CreateActionListener());
         view.addEditListener(new EditActionListener());
         view.addDeleteListener(new DeleteActionListener());
+        view.addUploadListener(new UploadActionListener());
         view.addLogoutListener(new LogoutActionListener());
     }
 
     private void refreshEntries() {
         List<KnowledgeEntry> entries = knowledgeService.getAllEntries();
         
-        // Build category lookup map (ID -> Name)
+        
         List<Category> categories = categoryService.getAllCategories();
         Map<Integer, String> categoryMap = new HashMap<>();
         for (Category cat : categories) {
@@ -68,7 +68,7 @@ public class DashboardController {
             String query = view.getSearchQuery();
             List<KnowledgeEntry> searchResults = knowledgeService.searchEntries(query);
             
-            // Re-fetch category map
+            
             List<Category> categories = categoryService.getAllCategories();
             Map<Integer, String> categoryMap = new HashMap<>();
             for (Category cat : categories) {
@@ -130,6 +130,32 @@ public class DashboardController {
             view.setVisible(false);
             view.dispose();
             loginView.setVisible(true);
+        }
+    }
+
+    private class UploadActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Upload Knowledge Entry File");
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Text Files (*.txt, *.csv, *.json)", "txt", "csv", "json"));
+            
+            int userSelection = fileChooser.showOpenDialog(view);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                java.io.File fileToUpload = fileChooser.getSelectedFile();
+                try {
+                    String title = fileToUpload.getName();
+                    String content = java.nio.file.Files.readString(fileToUpload.toPath(), java.nio.charset.StandardCharsets.UTF_8);
+                    
+                    int currentUserId = authService.getCurrentUser() != null ? authService.getCurrentUser().getId() : 1;
+                    boolean saved = entryController.showCreateForm(view, currentUserId, title, content);
+                    if (saved) {
+                        refreshEntries();
+                    }
+                } catch (Exception ex) {
+                    view.showErrorMessage("Failed to read file: " + ex.getMessage());
+                }
+            }
         }
     }
 }

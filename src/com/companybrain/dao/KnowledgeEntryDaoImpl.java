@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * JDBC implementation of KnowledgeEntryDao interfacing with the SQLite database.
- */
+
 public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
 
     @Override
@@ -119,9 +117,10 @@ public class KnowledgeEntryDaoImpl implements KnowledgeEntryDao {
     @Override
     public List<KnowledgeEntry> search(String keyword) {
         List<KnowledgeEntry> entries = new ArrayList<>();
-        String sql = "SELECT id, title, description, category_id, author_id, created_at, updated_at " +
-                     "FROM knowledge_entries WHERE title LIKE ? OR description LIKE ? " +
-                     "ORDER BY updated_at DESC";
+        String sql = "SELECT e.id, e.title, e.description, e.category_id, e.author_id, e.created_at, e.updated_at " +
+                     "FROM knowledge_entries e JOIN categories c ON e.category_id = c.id " +
+                     "WHERE e.title LIKE ? OR c.name LIKE ? " +
+                     "ORDER BY e.updated_at DESC";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

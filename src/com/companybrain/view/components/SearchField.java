@@ -7,9 +7,7 @@ import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-/**
- * A custom JTextField that supports placeholder text.
- */
+
 public class SearchField extends JTextField implements FocusListener {
     private final String placeholder;
     private boolean isShowingPlaceholder;
@@ -25,9 +23,7 @@ public class SearchField extends JTextField implements FocusListener {
         addFocusListener(this);
     }
 
-    /**
-     * Gets the actual search text, filtering out the placeholder.
-     */
+    
     public String getSearchQuery() {
         return isShowingPlaceholder ? "" : getText();
     }

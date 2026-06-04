@@ -4,14 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Utility for hashing and verifying passwords.
- */
+
 public class PasswordHasher {
 
-    /**
-     * Hashes a raw password using SHA-256.
-     */
+    
     public static String hash(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -22,9 +18,7 @@ public class PasswordHasher {
         }
     }
 
-    /**
-     * Verifies a raw password against a hash.
-     */
+    
     public static boolean verify(String password, String hash) {
         return hash(password).equalsIgnoreCase(hash);
     }

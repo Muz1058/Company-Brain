@@ -7,9 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Swing JDialog for creating or editing a KnowledgeEntry.
- */
+
 public class KnowledgeEntryForm extends JDialog {
     private JTextField txtTitle;
     private JTextArea txtDescription;
@@ -34,14 +32,14 @@ public class KnowledgeEntryForm extends JDialog {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         mainPanel.setBackground(Color.WHITE);
 
-        // Fields Panel
+        
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
         fieldsPanel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Title
+        
         JLabel lblTitle = new JLabel("Title:");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 12));
         gbc.gridx = 0;
@@ -56,7 +54,7 @@ public class KnowledgeEntryForm extends JDialog {
         gbc.weightx = 1.0;
         fieldsPanel.add(txtTitle, gbc);
 
-        // Category
+        
         JLabel lblCategory = new JLabel("Category:");
         lblCategory.setFont(new Font("Segoe UI", Font.BOLD, 12));
         gbc.gridx = 0;
@@ -71,7 +69,7 @@ public class KnowledgeEntryForm extends JDialog {
         gbc.weightx = 1.0;
         fieldsPanel.add(cmbCategory, gbc);
 
-        // Description
+        
         JLabel lblDesc = new JLabel("Description:");
         lblDesc.setFont(new Font("Segoe UI", Font.BOLD, 12));
         gbc.gridx = 0;
@@ -92,7 +90,7 @@ public class KnowledgeEntryForm extends JDialog {
         gbc.fill = GridBagConstraints.BOTH;
         fieldsPanel.add(scrollPane, gbc);
 
-        // Bottom Action Panel
+        
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
         actionPanel.setBackground(Color.WHITE);
         

@@ -2,24 +2,20 @@ package com.companybrain.util;
 
 import java.io.File;
 
-/**
- * Global configuration properties helper.
- */
-public class Config {
-    private static final String DEFAULT_DB_NAME = "company_brain.db";
 
-    /**
-     * Returns the SQLite JDBC Connection URL.
-     */
+public class Config {
+    private static String dbName = "company_brain.db";
+
     public static String getDbUrl() {
-        return "jdbc:sqlite:" + DEFAULT_DB_NAME;
+        return "jdbc:sqlite:" + dbName;
     }
 
-    /**
-     * Checks if the database file exists.
-     */
+    public static void setDbName(String name) {
+        dbName = name;
+    }
+
     public static boolean dbFileExists() {
-        File file = new File(DEFAULT_DB_NAME);
+        File file = new File(dbName);
         return file.exists();
     }
 }

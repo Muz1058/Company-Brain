@@ -2,9 +2,7 @@ package com.companybrain.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Represents a knowledge base entry.
- */
+
 public class KnowledgeEntry {
     private int id;
     private String title;

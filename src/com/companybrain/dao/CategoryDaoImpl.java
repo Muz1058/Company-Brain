@@ -8,9 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * JDBC implementation of CategoryDao interfacing with the SQLite database.
- */
+
 public class CategoryDaoImpl implements CategoryDao {
 
     @Override

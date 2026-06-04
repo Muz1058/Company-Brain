@@ -7,9 +7,7 @@ import com.companybrain.util.InputValidator;
 
 import java.util.List;
 
-/**
- * Concrete implementation of the KnowledgeService interface.
- */
+
 public class KnowledgeServiceImpl implements KnowledgeService {
     private final KnowledgeEntryDao entryDao;
 

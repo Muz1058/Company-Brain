@@ -9,9 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * JDBC implementation of UserDao interfacing with the SQLite database.
- */
+
 public class UserDaoImpl implements UserDao {
 
     @Override

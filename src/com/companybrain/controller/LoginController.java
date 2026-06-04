@@ -7,13 +7,12 @@ import com.companybrain.model.User;
 import com.companybrain.service.*;
 import com.companybrain.view.DashboardView;
 import com.companybrain.view.LoginView;
+import com.companybrain.view.SignUpView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Controller managing the Authentication UI logic and transitions.
- */
+
 public class LoginController {
     private final LoginView view;
     private final AuthService authService;
@@ -22,6 +21,8 @@ public class LoginController {
         this.view = view;
         this.authService = authService;
         this.view.addLoginListener(new LoginActionListener());
+        this.view.addResetListener(new ResetActionListener());
+        this.view.addSignUpListener(new SignUpActionListener());
     }
 
     private class LoginActionListener implements ActionListener {
@@ -30,14 +31,21 @@ public class LoginController {
             String username = view.getUsername();
             String password = view.getPassword();
 
+            if (username.isEmpty()) {
+                view.showErrorMessage("Username cannot be empty.");
+                return;
+            }
+            if (password.isEmpty()) {
+                view.showErrorMessage("Password cannot be empty.");
+                return;
+            }
+
             try {
                 User user = authService.login(username, password);
                 
-                // Hide login screen
                 view.setVisible(false);
                 view.clearFields();
 
-                // Initialize Dashboard MVC
                 DashboardView dashboardView = new DashboardView();
                 KnowledgeService knowledgeService = new KnowledgeServiceImpl(new KnowledgeEntryDaoImpl());
                 CategoryService categoryService = new CategoryServiceImpl(new CategoryDaoImpl());
@@ -48,6 +56,23 @@ public class LoginController {
             } catch (AuthenticationException ex) {
                 view.showErrorMessage(ex.getMessage());
             }
+        }
+    }
+
+    private class ResetActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.clearFields();
+        }
+    }
+
+    private class SignUpActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.setVisible(false);
+            SignUpView signUpView = new SignUpView();
+            new SignUpController(signUpView, authService, view);
+            signUpView.setVisible(true);
         }
     }
 }

@@ -7,9 +7,7 @@ import com.companybrain.model.User;
 import com.companybrain.util.InputValidator;
 import com.companybrain.util.PasswordHasher;
 
-/**
- * Concrete implementation of the AuthService interface.
- */
+
 public class AuthServiceImpl implements AuthService {
     private final UserDao userDao;
     private User currentUser;

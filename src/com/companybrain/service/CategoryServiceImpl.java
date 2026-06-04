@@ -7,9 +7,7 @@ import com.companybrain.util.InputValidator;
 
 import java.util.List;
 
-/**
- * Concrete implementation of the CategoryService interface.
- */
+
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryDao categoryDao;
 
@@ -33,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ValidationException("Category name cannot be empty.");
         }
 
-        // Check if name already exists
+        
         for (Category cat : categoryDao.findAll()) {
             if (cat.getName().equalsIgnoreCase(name.trim())) {
                 throw new ValidationException("Category with this name already exists.");

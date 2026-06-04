@@ -11,9 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Controller managing the JDialog CRUD form for Knowledge Entries.
- */
+
 public class KnowledgeEntryController {
     private final KnowledgeService knowledgeService;
     private final CategoryService categoryService;
@@ -23,18 +21,25 @@ public class KnowledgeEntryController {
         this.categoryService = categoryService;
     }
 
-    /**
-     * Launches the form in create mode. Returns true if successfully saved.
-     */
     public boolean showCreateForm(Frame parent, int authorId) {
+        return showCreateForm(parent, authorId, null, null);
+    }
+
+    public boolean showCreateForm(Frame parent, int authorId, String initialTitle, String initialDescription) {
         KnowledgeEntryForm form = new KnowledgeEntryForm(parent, "New Knowledge Entry");
         
-        // Fetch categories to populate dropdown
         List<Category> categories = categoryService.getAllCategories();
         form.setCategories(categories);
 
+        if (initialTitle != null) {
+            form.setEntryTitle(initialTitle);
+        }
+        if (initialDescription != null) {
+            form.setEntryDescription(initialDescription);
+        }
+
         while (true) {
-            form.setVisible(true); // Modal blocks execution here
+            form.setVisible(true);
             
             if (!form.isSaveClicked()) {
                 return false;
@@ -53,28 +58,25 @@ public class KnowledgeEntryController {
                 return true;
             } catch (ValidationException e) {
                 JOptionPane.showMessageDialog(form, e.getMessage(), "Validation Error", JOptionPane.WARNING_MESSAGE);
-                // Keep the dialog open for correction
             }
         }
     }
 
-    /**
-     * Launches the form in edit mode. Returns true if successfully updated.
-     */
+    
     public boolean showEditForm(Frame parent, KnowledgeEntry entry) {
         KnowledgeEntryForm form = new KnowledgeEntryForm(parent, "Edit Knowledge Entry");
         
-        // Fetch categories to populate dropdown
+        
         List<Category> categories = categoryService.getAllCategories();
         form.setCategories(categories);
         
-        // Populate fields
+        
         form.setEntryTitle(entry.getTitle());
         form.setEntryDescription(entry.getDescription());
         form.setSelectedCategoryId(entry.getCategoryId());
 
         while (true) {
-            form.setVisible(true); // Modal blocks execution here
+            form.setVisible(true); 
 
             if (!form.isSaveClicked()) {
                 return false;
@@ -93,7 +95,7 @@ public class KnowledgeEntryController {
                 return true;
             } catch (ValidationException e) {
                 JOptionPane.showMessageDialog(form, e.getMessage(), "Validation Error", JOptionPane.WARNING_MESSAGE);
-                // Keep the dialog open for correction
+                
             }
         }
     }

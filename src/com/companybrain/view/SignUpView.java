@@ -6,18 +6,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-
-public class LoginView extends JFrame {
+public class SignUpView extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
-    private ModernButton btnLogin;
-    private ModernButton btnReset;
+    private JPasswordField txtConfirmPassword;
+    private JComboBox<String> cmbRole;
     private ModernButton btnSignUp;
+    private ModernButton btnReset;
+    private ModernButton btnBackToLogin;
 
-    public LoginView() {
-        setTitle("Company Brain - Login");
+    public SignUpView() {
+        setTitle("Company Brain - Sign Up");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 320);
+        setSize(420, 380);
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -31,10 +32,10 @@ public class LoginView extends JFrame {
         mainPanel.setBackground(new Color(245, 246, 250));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel lblTitle = new JLabel("Company Brain", JLabel.CENTER);
+        JLabel lblTitle = new JLabel("Create Account", JLabel.CENTER);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
         lblTitle.setForeground(new Color(44, 62, 80));
         gbc.gridx = 0;
@@ -67,25 +68,49 @@ public class LoginView extends JFrame {
         gbc.gridy = 2;
         mainPanel.add(txtPassword, gbc);
 
+        JLabel lblConfirmPassword = new JLabel("Confirm:");
+        lblConfirmPassword.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        mainPanel.add(lblConfirmPassword, gbc);
+
+        txtConfirmPassword = new JPasswordField(15);
+        txtConfirmPassword.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        mainPanel.add(txtConfirmPassword, gbc);
+
+        JLabel lblRole = new JLabel("Role:");
+        lblRole.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        mainPanel.add(lblRole, gbc);
+
+        cmbRole = new JComboBox<>(new String[]{"VIEWER", "EDITOR", "ADMIN"});
+        cmbRole.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        mainPanel.add(cmbRole, gbc);
+
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         buttonPanel.setBackground(new Color(245, 246, 250));
-        btnLogin = new ModernButton("Sign In");
+        btnSignUp = new ModernButton("Register", new Color(46, 204, 113));
         btnReset = new ModernButton("Reset", new Color(149, 165, 166));
-        buttonPanel.add(btnLogin);
+        buttonPanel.add(btnSignUp);
         buttonPanel.add(btnReset);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
-        gbc.insets = new Insets(15, 10, 5, 10);
+        gbc.insets = new Insets(15, 8, 5, 8);
         mainPanel.add(buttonPanel, gbc);
 
-        btnSignUp = new ModernButton("Create New Account", new Color(46, 204, 113));
+        btnBackToLogin = new ModernButton("Back to Login", new Color(52, 152, 219));
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
-        gbc.insets = new Insets(5, 10, 10, 10);
-        mainPanel.add(btnSignUp, gbc);
+        gbc.insets = new Insets(5, 8, 8, 8);
+        mainPanel.add(btnBackToLogin, gbc);
 
         add(mainPanel);
     }
@@ -98,24 +123,38 @@ public class LoginView extends JFrame {
         return new String(txtPassword.getPassword());
     }
 
-    public void addLoginListener(ActionListener listener) {
-        btnLogin.addActionListener(listener);
+    public String getConfirmPassword() {
+        return new String(txtConfirmPassword.getPassword());
     }
 
-    public void addResetListener(ActionListener listener) {
-        btnReset.addActionListener(listener);
+    public String getSelectedRole() {
+        return (String) cmbRole.getSelectedItem();
     }
 
     public void addSignUpListener(ActionListener listener) {
         btnSignUp.addActionListener(listener);
     }
 
+    public void addResetListener(ActionListener listener) {
+        btnReset.addActionListener(listener);
+    }
+
+    public void addBackToLoginListener(ActionListener listener) {
+        btnBackToLogin.addActionListener(listener);
+    }
+
     public void showErrorMessage(String message) {
-        JOptionPane.showMessageDialog(this, message, "Login Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, message, "Registration Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showInfoMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void clearFields() {
         txtUsername.setText("");
         txtPassword.setText("");
+        txtConfirmPassword.setText("");
+        cmbRole.setSelectedIndex(0);
     }
 }

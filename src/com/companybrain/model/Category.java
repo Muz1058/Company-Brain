@@ -1,8 +1,6 @@
 package com.companybrain.model;
 
-/**
- * Represents a knowledge entry category.
- */
+
 public class Category {
     private int id;
     private String name;
@@ -33,7 +31,7 @@ public class Category {
 
     @Override
     public String toString() {
-        return name; // Useful for rendering in JComboBox
+        return name; 
     }
 
     @Override

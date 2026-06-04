@@ -9,13 +9,11 @@ import com.companybrain.view.LoginView;
 
 import javax.swing.*;
 
-/**
- * Entry point for the Company Brain Swing Application.
- */
+
 public class Main {
 
     public static void main(String[] args) {
-        // 1. Initialize SQLite database schemas
+        
         try {
             DatabaseManager.initializeDatabase();
         } catch (Exception e) {
@@ -26,14 +24,14 @@ public class Main {
             System.exit(1);
         }
 
-        // 2. Configure standard look and feel
+        
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // Fallback silently to default cross-platform Swing UI
+            
         }
 
-        // 3. Launch Login screen on Event Dispatch Thread (EDT)
+        
         SwingUtilities.invokeLater(() -> {
             LoginView loginView = new LoginView();
             AuthService authService = new AuthServiceImpl(new UserDaoImpl());

@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Swing JFrame for the Dashboard Window.
- */
+
 public class DashboardView extends JFrame {
     private SearchField txtSearch;
     private ModernButton btnSearch;
@@ -24,6 +22,7 @@ public class DashboardView extends JFrame {
     private ModernButton btnCreate;
     private ModernButton btnEdit;
     private ModernButton btnDelete;
+    private ModernButton btnUpload;
     private ModernButton btnLogout;
     
     private JLabel lblUserSession;
@@ -43,7 +42,6 @@ public class DashboardView extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         mainPanel.setBackground(Color.WHITE);
 
-        // Header Panel (Search, User Session, Logout)
         JPanel headerPanel = new JPanel(new BorderLayout(10, 10));
         headerPanel.setBackground(Color.WHITE);
 
@@ -58,19 +56,18 @@ public class DashboardView extends JFrame {
         sessionPanel.setBackground(Color.WHITE);
         lblUserSession = new JLabel("Logged in as: N/A");
         lblUserSession.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-        btnLogout = new ModernButton("Logout", new Color(231, 76, 60)); // Crimson red
+        btnLogout = new ModernButton("Logout", new Color(231, 76, 60));
         sessionPanel.add(lblUserSession);
         sessionPanel.add(btnLogout);
 
         headerPanel.add(searchPanel, BorderLayout.WEST);
         headerPanel.add(sessionPanel, BorderLayout.EAST);
 
-        // Content Table Panel
         String[] columnNames = {"ID", "Title", "Category", "Last Updated"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // read-only cells
+                return false;
             }
         };
         tblEntries = new JTable(tableModel);
@@ -79,26 +76,28 @@ public class DashboardView extends JFrame {
         tblEntries.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         JScrollPane scrollPane = new JScrollPane(tblEntries);
 
-        // Sidebar / Actions Panel
         JPanel actionsPanel = new JPanel();
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.Y_AXIS));
         actionsPanel.setBackground(new Color(245, 246, 250));
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        btnCreate = new ModernButton("New Entry", new Color(46, 204, 113)); // Emerald green
-        btnEdit = new ModernButton("Edit Entry", new Color(241, 196, 15));   // Warm yellow
-        btnDelete = new ModernButton("Delete Entry", new Color(231, 76, 60)); // Crimson red
+        btnCreate = new ModernButton("New Entry", new Color(46, 204, 113));
+        btnEdit = new ModernButton("Edit Entry", new Color(241, 196, 15));
+        btnDelete = new ModernButton("Delete Entry", new Color(231, 76, 60));
+        btnUpload = new ModernButton("Upload File", new Color(155, 89, 182));
 
-        // Add padding around buttons
         btnCreate.setMaximumSize(new Dimension(150, 40));
         btnEdit.setMaximumSize(new Dimension(150, 40));
         btnDelete.setMaximumSize(new Dimension(150, 40));
+        btnUpload.setMaximumSize(new Dimension(150, 40));
 
         actionsPanel.add(btnCreate);
         actionsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         actionsPanel.add(btnEdit);
         actionsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         actionsPanel.add(btnDelete);
+        actionsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        actionsPanel.add(btnUpload);
 
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
@@ -137,10 +136,10 @@ public class DashboardView extends JFrame {
         return txtSearch.getSearchQuery();
     }
 
-    // Action Listener Wire-ups
+    
     public void addSearchListener(ActionListener listener) {
         btnSearch.addActionListener(listener);
-        txtSearch.addActionListener(listener); // Enter key triggers search too
+        txtSearch.addActionListener(listener); 
     }
 
     public void addCreateListener(ActionListener listener) {
@@ -153,6 +152,10 @@ public class DashboardView extends JFrame {
 
     public void addDeleteListener(ActionListener listener) {
         btnDelete.addActionListener(listener);
+    }
+
+    public void addUploadListener(ActionListener listener) {
+        btnUpload.addActionListener(listener);
     }
 
     public void addLogoutListener(ActionListener listener) {
