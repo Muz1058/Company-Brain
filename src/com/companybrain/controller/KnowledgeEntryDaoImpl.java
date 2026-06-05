@@ -1,5 +1,6 @@
-package com.companybrain.dao;
+package com.companybrain.controller;
 
+import com.companybrain.dao.KnowledgeEntryDao;
 import com.companybrain.database.DatabaseManager;
 import com.companybrain.exception.DatabaseException;
 import com.companybrain.model.KnowledgeEntry;
