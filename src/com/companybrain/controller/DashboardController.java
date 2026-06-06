@@ -8,6 +8,7 @@ import com.companybrain.service.AuthService;
 import com.companybrain.service.CategoryService;
 import com.companybrain.service.KnowledgeService;
 import com.companybrain.service.KnowledgeServiceImpl;
+import com.companybrain.service.UserManagementService;
 import com.companybrain.view.DashboardView;
 import com.companybrain.view.LoginView;
 
@@ -25,17 +26,22 @@ public class DashboardController {
     private final CategoryService        categoryService;
     private final AuthService            authService;
     private final LoginView              loginView;
+    private final UserManagementService  userMgmtService;  
     private final KnowledgeEntryController entryController;
+    
 
     public DashboardController(DashboardView view,
                                KnowledgeService knowledgeService,
                                CategoryService categoryService,
                                AuthService authService,
-                               LoginView loginView) {
+                               UserManagementService userMgmtService, 
+                               LoginView loginView) 
+    {
         this.view              = view;
         this.knowledgeService  = knowledgeService;
         this.categoryService   = categoryService;
         this.authService       = authService;
+        this.userMgmtService   = userMgmtService;
         this.loginView         = loginView;
         this.entryController   = new KnowledgeEntryController(knowledgeService, categoryService);
 
@@ -62,6 +68,7 @@ public class DashboardController {
         view.addEditListener(new EditActionListener());
         view.addDeleteListener(new DeleteActionListener());
         view.addUploadListener(new UploadActionListener());
+        view.addUserMgmtListener(new UserMgmtActionListener());
         view.addLogoutListener(new LogoutActionListener());
     }
 
@@ -274,6 +281,20 @@ public class DashboardController {
                 JOptionPane.showMessageDialog(form, ex.getMessage(),
                     "Validation Error", JOptionPane.WARNING_MESSAGE);
             }
+        }
+    }
+    private class UserMgmtActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            User admin = authService.getCurrentUser();
+            if (admin == null || !admin.isAdmin()) {
+                view.showErrorMessage("Access denied.");
+                return;
+            }
+            com.companybrain.view.UserManagementView mgmtView =
+                new com.companybrain.view.UserManagementView(view);
+            new UserManagementController(mgmtView, authService, userMgmtService);
+            mgmtView.setVisible(true);
         }
     }
 }

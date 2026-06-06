@@ -8,16 +8,12 @@ public class Config {
     private static String dbName = "company_brain.db";
 
     public static String getDbUrl() {
-
-        String appDataPath =System.getenv("APPDATA")+ File.separator+ APP_FOLDER;
-
+        String appDataPath = System.getenv("APPDATA") + File.separator + APP_FOLDER;
         File directory = new File(appDataPath);
-
         if (!directory.exists()) {
             directory.mkdirs();
         }
-
-        String dbPath =appDataPath+ File.separator+ dbName;
+        String dbPath = appDataPath + File.separator + dbName;
         return "jdbc:sqlite:" + dbPath;
     }
 
@@ -26,10 +22,14 @@ public class Config {
     }
 
     public static boolean dbFileExists() {
-
-        String appDataPath =System.getenv("APPDATA")+ File.separator+ APP_FOLDER;
-        String dbPath =appDataPath+ File.separator+ dbName;
-
+        String appDataPath = System.getenv("APPDATA") + File.separator + APP_FOLDER;
+        String dbPath = appDataPath + File.separator + dbName;
         return new File(dbPath).exists();
+    }
+
+    // ── ADD THIS METHOD ───────────────────────────────────────────────────────
+    public static String resolveDbPath() {
+        String appDataPath = System.getenv("APPDATA") + File.separator + APP_FOLDER;
+        return appDataPath + File.separator + dbName;
     }
 }

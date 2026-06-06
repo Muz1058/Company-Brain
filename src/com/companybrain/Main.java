@@ -17,10 +17,12 @@ public class Main {
         try {
             DatabaseManager.initializeDatabase();
         } catch (Exception e) {
+        	 e.printStackTrace();
             JOptionPane.showMessageDialog(null, 
                     "Database initialization error: " + e.getMessage(), 
                     "Database Failure", 
                     JOptionPane.ERROR_MESSAGE);
+            
             System.exit(1);
         }
 
